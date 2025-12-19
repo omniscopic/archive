@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive | Rich Blundell</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-deep: #1a2e1a;
+            --earth-forest: #2d4a2d;
+            --earth-moss: #4a6741;
+            --earth-sage: #7a9a6d;
+            --earth-lichen: #a8c49a;
+            --earth-mist: #d4e4cc;
+            --earth-cream: #f5f7f2;
+            --earth-sand: #e8e4dc;
+            --water-deep: #1e3a4c;
+            --water-tidal: #3d6b7d;
+            --accent-ochre: #b8860b;
+            --text-primary: #1a1f1a;
+            --text-secondary: #4a5249;
+            --text-muted: #6b736a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Source Sans 3', -apple-system, sans-serif;
+            font-weight: 300;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: var(--earth-cream);
+            min-height: 100vh;
+        }
+
+        /* Subtle texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            z-index: 1000;
+        }
+
+        /* Header */
+        .archive-header {
+            background: linear-gradient(180deg, var(--earth-deep) 0%, var(--earth-forest) 100%);
+            color: var(--earth-cream);
+            padding: 4rem 2rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .archive-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--earth-sage), var(--accent-ochre), var(--earth-sage));
+        }
+
+        .header-content {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            opacity: 0.7;
+        }
+
+        .breadcrumb a {
+            color: var(--earth-lichen);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            opacity: 0.8;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+        }
+
+        .header-subtitle {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0.85;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .era-nav {
+            background: var(--earth-sand);
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0 2rem;
+        }
+
+        .era-nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .era-nav-inner::-webkit-scrollbar {
+            display: none;
+        }
+
+        .era-link {
+            padding: 1rem 1.25rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            color: var(--text-secondary);
+            text-decoration: none;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .era-link:hover {
+            color: var(--earth-forest);
+            background: rgba(0,0,0,0.02);
+        }
+
+        .era-link.active {
+            color: var(--earth-forest);
+            border-bottom-color: var(--earth-moss);
+        }
+
+        /* Main content */
+        .archive-main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3rem 2rem 6rem;
+        }
+
+        /* Era sections */
+        .era-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 80px;
+        }
+
+        .era-header {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--earth-mist);
+        }
+
+        .era-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--earth-forest);
+        }
+
+        .era-years {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .era-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-style: italic;
+            padding-left: 1rem;
+            border-left: 2px solid var(--earth-lichen);
+        }
+
+        /* Project cards */
+        .projects-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+        .project-card:hover {
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+
+        .project-header {
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            background: linear-gradient(135deg, rgba(74, 103, 65, 0.03) 0%, transparent 100%);
+        }
+
+        .project-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--earth-deep);
+            line-height: 1.3;
+        }
+
+        .project-toggle {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .project-card.expanded .project-toggle {
+            transform: rotate(180deg);
+        }
+
+        .project-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+
+        .project-card.expanded .project-content {
+            max-height: 2000px;
+        }
+
+        .project-content-inner {
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .project-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.25rem;
+            line-height: 1.75;
+        }
+
+        .project-description em {
+            color: var(--earth-moss);
+        }
+
+        .project-links-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .project-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .project-links a {
+            font-size: 0.9rem;
+            color: var(--water-tidal);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .project-links a:hover {
+            color: var(--water-deep);
+        }
+
+        .project-links a::before {
+            content: '→';
+            font-size: 0.8em;
+            opacity: 0.6;
+        }
+
+        .project-links .note {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Podcast/Media section styling */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .media-item {
+            background: white;
+            padding: 1rem 1.25rem;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+
+        .media-item a {
+            font-size: 0.9rem;
+            color: var(--water-tidal);
+            text-decoration: none;
+            line-height: 1.5;
+            display: block;
+        }
+
+        .media-item a:hover {
+            color: var(--water-deep);
+        }
+
+        /* Footer */
+        .archive-footer {
+            background: var(--earth-deep);
+            color: var(--earth-mist);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .archive-footer p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .archive-footer a {
+            color: var(--earth-lichen);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .archive-header {
+                padding: 3rem 1.5rem 2rem;
+            }
+
+            .archive-main {
+                padding: 2rem 1.5rem 4rem;
+            }
+
+            .era-nav {
+                padding: 0 1rem;
+            }
+
+            .era-link {
+                padding: 0.875rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .project-header {
+                padding: 1rem 1.25rem;
+            }
+
+            .project-content-inner {
+                padding: 0 1.25rem 1.25rem;
+            }
+
+            .media-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation for page load */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .era-section {
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .era-section:nth-child(2) { animation-delay: 0.1s; }
+        .era-section:nth-child(3) { animation-delay: 0.15s; }
+        .era-section:nth-child(4) { animation-delay: 0.2s; }
+        .era-section:nth-child(5) { animation-delay: 0.25s; }
+        .era-section:nth-child(6) { animation-delay: 0.3s; }
+        .era-section:nth-child(7) { animation-delay: 0.35s; }
+    </style>
+</head>
+<body>
+
+<header class="archive-header">
+    <div class="header-content">
+        <nav class="breadcrumb">
+            <a href="/">Home</a> / Archive
+        </nav>
+        <h1>Projects Archive</h1>
+        <p class="header-subtitle">Three decades of research expeditions, ecological fieldwork, and creative practice exploring the intelligence embedded in natural systems.</p>
+    </div>
+</header>
+
+<nav class="era-nav">
+    <div class="era-nav-inner">
+        <a href="#era-2024" class="era-link">2024–Present</a>
+        <a href="#era-2022" class="era-link">2022–2024</a>
+        <a href="#era-2021" class="era-link">2021–2023</a>
+        <a href="#era-2019" class="era-link">2019–2021</a>
+        <a href="#era-2018" class="era-link">2018–2019</a>
+        <a href="#era-2014" class="era-link">2014–2017</a>
+        <a href="#era-2005" class="era-link">2005–2014</a>
+        <a href="#era-1999" class="era-link">1999–2008</a>
+        <a href="#media" class="era-link">Media</a>
+    </div>
+</nav>
+
+<main class="archive-main">
+
+    <!-- 2024-Present -->
+    <section id="era-2024" class="era-section">
+        <header class="era-header">
+            <h2 class="era-title">EARTHOS Research & Beautiful Futures Lab</h2>
+            <span class="era-years">2024–Present</span>
+        </header>
+        <p class="era-description">Cross-continental bioregional research, indigenous cultural revitalization, and the development of ecological intelligence curriculum for the AI transition.</p>
+        
+        <div class="projects-grid">
+            
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Cattail Conservatory Project (2024–2029)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Collaborative ecological restoration and indigenous cultural revitalization with Robert Peters (Mashpee Wampanoag) and his daughter, Boston Indigenous Public Space Initiative (BIPSI), and Oika along the Neponset River. The project combines invasive phragmites eradication with native broadleaf cattail (<em>Typha latifolia</em>) restoration while teaching traditional weaving and mat-making practices across three phases. This multi-year initiative links ecological healing with cultural healing and intergenerational knowledge transmission.</p>
+                        <p class="project-links-title">Resources</p>
+                        <ul class="project-links">
+                            <li><span class="note">Project materials and documentation available through Oika Network</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Cause & Affection: A Water Quality of Life (2024–Present)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Nantucket Harbor eelgrass conservation project integrating oceanographic buoy deployment with artistic documentation by Rita Leduc. The project algorithmically links artwork value to real-time pH measurements from the buoy, demonstrating the continuity between harbor health and human wellbeing while supporting bay scallop (<em>Argopecten irradians</em>) habitat conservation through eelgrass (<em>Zostera marina</em>) ecosystem monitoring.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://oika.com/extending-ecology" target="_blank">Oika Art-Science Approach</a></li>
+                            <li><a href="https://youtu.be/6YQwoOvoyvQ?si=u6XNYoN9WhXnQ6fR" target="_blank">Cause & Affection: A Water Quality of Life (Video)</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Beautiful Futures Lab Road Trip (2024–2025)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Cross-continental bioregional research recruitment initiative seeking 5–10 specialized researchers across seven streams (Core Human Development, Cultural Communication & Creative Expression, Systems Thinking & Social Change, Wellness & Healing, Regenerative Business, Educational & Learning Leadership, and Indigenous Wisdom & Cultural Bridge Leadership) to apply Oika principles within their domains through year-long research fellowships.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://open.substack.com/pub/beautifulfutureslab/p/dont-deny-the-possibility-of-a-beautiful" target="_blank">Don't Deny the Possibility of a Beautiful Future (Substack)</a></li>
+                            <li><a href="https://youtu.be/U3CuHLhs_Aw" target="_blank">Announcing the Beautiful Futures Lab</a></li>
+                            <li><a href="https://youtu.be/MgsN3VQb_5k" target="_blank">Oika Introduction Video</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Artful Intelligence: Syracuse University (2024)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Public lecture exploring the relationship between artificial and ecological intelligence, proposing that AI's arrival presents an opportunity to reawaken latent Earth-endowed human intelligence through right-relationship with natural systems rather than viewing artificial intelligence as threatening human relevance.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://youtu.be/ZkKA-h5wkxE" target="_blank">The Coming AI Revolution: Artful Intelligence in a Beautiful Future</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- 2022-2024 -->
+    <section id="era-2022" class="era-section">
+        <header class="era-header">
+            <h2 class="era-title">Maria Mitchell Association Scientist-in-Residence</h2>
+            <span class="era-years">2022–2024</span>
+        </header>
+        <p class="era-description">Harbor monitoring, indigenous knowledge integration, and public science programs on Nantucket Island.</p>
+        
+        <div class="projects-grid">
+            
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Nantucket Harbor Monitoring Project (2022–Present)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Deployed state-of-the-art oceanographic research buoys measuring pH, nutrients, dissolved oxygen, temperature, salinity and chlorophyll to track eelgrass ecosystem health and inform bay scallop conservation. Project demonstrates oikalogical research methodology, using scientific monitoring as foundation for eco-cultural communication and conservation action through partnerships with Great Harbor Yacht Club Foundation.</p>
+                        <p class="project-links-title">Resources</p>
+                        <ul class="project-links">
+                            <li><span class="note">Maria Mitchell Association project documentation</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Head, Heart, and Hands Sound Walk (2022)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Collaborative geo-locative audio experience created with Wampanoag artist Robert Peters and Dakota Clearwater Lacroix (Curious Lightning), connecting Native ecological knowledge with contemporary scientific understanding through place-based storytelling on Nantucket. The whimsical time-traveling audio walk features AI character AWMI-M3-4170 guiding listeners through Maria Mitchell's astronomical legacy while reimagining stories of Nantucket's Native voices and enchantments.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://oika.com/oika-art-nantucket" target="_blank">The Art of Oika: Nantucket (exhibition)</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Stomp Dance Cultural Healing Project (2022)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Indigenous healing ceremony collaboration with Robert Peters and the Wampanoag community addressing addiction, suicide, and trauma through traditional stomp dance practice. "Stomp Day – A Day of Healing" invited all tribes and people to participate in etching a healing path that symbolizes restoration of both community and Mother Earth, using call and response through song and movement as medicine for body, spirit, and community.</p>
+                        <p class="project-links-title">Resources</p>
+                        <ul class="project-links">
+                            <li><span class="note">Documentation through Oika Network</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Becoming Earthwise Workshop Series (2022–2024)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Five-part public program at Maria Mitchell Association exploring ecological intelligence through science and direct experience. Earth Story Walks traced cosmic history through Nantucket landscapes, connecting 13.8 billion years of evolution with immediate landscape features like glacial erratics, kettle ponds, and coastal dynamics.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://youtu.be/KWhCloGiD5I" target="_blank">New & Full Moon Campfires</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">The Nature of Nantucket Podcast (2022–Present)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Co-hosted ongoing podcast bridging scientific research with public engagement, featuring conversations with artists (Rita Leduc, Robert Peters), scientists, and community members about Nantucket's ecological and cultural landscapes.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://podcasts.apple.com/us/podcast/the-nature-of-nantucket/id1603111080" target="_blank">The Nature of Nantucket Podcast</a></li>
+                            <li><a href="https://podcasts.apple.com/us/podcast/the-nature-of-nantucket/id1603111080?i=1000585550872" target="_blank">Episode with Rita Leduc Part 1</a></li>
+                            <li><a href="https://podcasts.apple.com/us/podcast/the-nature-of-nantucket/id1603111080?i=1000586615639" target="_blank">Episode with Rita Leduc Part 2</a></li>
+                            <li><a href="https://podcasts.apple.com/us/podcast/the-nature-of-nantucket-with-robert-peters-and/id1603111080?i=1000580329288" target="_blank">Episode with Robert Peters Part 1</a></li>
+                            <li><a href="https://podcasts.apple.com/us/podcast/the-nature-of-nantucket-with-robert-peters-and/id1603111080?i=1000581050001" target="_blank">Episode with Robert Peters Part 2</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Science Speaker Series (2022–2024)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Public lecture series at Maria Mitchell Association translating research across physics, astronomy, biology, ecology, and anthropology into accessible cultural narratives that connect cosmic evolution with local natural history.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://youtu.be/XU3YGZoCRAk" target="_blank">Why Science Matters – MMA Science Speaker Series</a></li>
+                            <li><a href="https://www.mariamitchell.org/science-speaker-series" target="_blank">MMA Science Speaker Series</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">The Art of Oika: Nantucket (2023)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Group exhibition at Maria Mitchell Gallery featuring four artists (Rita Leduc, Dakota Clearwater Lacroix, Dena Haden, Robert Peters) demonstrating how ecological intelligence informs creative practice. Exhibition combined scientific insights with artistic expressions unified by aim to heal people, place, and planet through works guided by deep ecological principles found within Nantucket's nature and culture.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://oika.com/oika-art-nantucket" target="_blank">The Art of Oika: Nantucket</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Ecological Intelligence in Culture – AAA Conference (2023)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">American Anthropological Association conference presentation examining how indigenous and ecological worldviews inform cultural communication and addressing the intelligence crisis underlying civilizational challenges through the Oika framework.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://youtu.be/_oPjFWOAFXo" target="_blank">Ecological Intelligence in Culture – AAA Conference Presentation</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- 2021-2023 -->
+    <section id="era-2021" class="era-section">
+        <header class="era-header">
+            <h2 class="era-title">Hubbard Brook & White Mountains</h2>
+            <span class="era-years">2021–2023</span>
+        </header>
+        <p class="era-description">Major art-science collaborations at LTER sites, exploring how ecological dynamics manifest through creative practice.</p>
+        
+        <div class="projects-grid">
+            
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Extending Ecology Exhibition (2022–2023)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Major art-science collaboration with Rita Leduc at Hubbard Brook Experimental Forest and Museum of the White Mountains, exploring how ecological dynamics manifest through creative practice. Exhibition demonstrated phenomenological, relational approaches to ecological understanding through Field Marks installed at four locations in the forest, each representing sites of deep reverence developed through sustained engagement with White Mountain ecosystems.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://oika.com/extending-ecology" target="_blank">Extending Ecology: Making Meaning with the White Mountains</a></li>
+                            <li><a href="https://vimeo.com/richblundell/oika-art-hubbard-brook" target="_blank">Oika Art at Hubbard Brook (Film)</a></li>
+                            <li><a href="https://vimeo.com/772653481" target="_blank">Full Documentary</a></li>
+                            <li><a href="https://www.youtube.com/watch?v=G1GWC5ZfKIM" target="_blank">WCVB Chronicle Feature (1:30–2:50)</a></li>
+                            <li><a href="https://theplacecollective.org/2023/11/29/keeping-the-ing-in-extending-ecology/" target="_blank">Keeping the -ing in Extending Ecology</a></li>
+                            <li><a href="https://www.youtube.com/watch?v=ADU6fT0PTAc" target="_blank">Making Meaning with the White Mountains Panel Discussion</a></li>
+                            <li><a href="https://static1.squarespace.com/static/5b63600329711476b6a29d4e/t/66185a18bad5063fef60a49e/1712871960897/CATALOG+SAMPLE_final_dual+view-compressed.pdf" target="_blank">Exhibition Catalog (PDF)</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Ecology Extended: Fecundity (2022)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Film and workshop series at Hubbard Brook Experimental Forest documenting the collaborative process of creating art embedded in forest ecosystem research, demonstrating phenomenological approaches to ecological understanding and the creative process of making meaning with natural systems.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://youtu.be/Y3NElWITHvE" target="_blank">Ecology Extended: Fecundity</a></li>
+                            <li><a href="https://youtu.be/UsNd8ANQl5s" target="_blank">Art-Sci at HBEF and LTERs Panel Discussion – Plymouth State University</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Anecdotes of Continuity (2024)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Multimedia documentation project with Rita Leduc examining the relationship between artistic practice and ecological processes in the White Mountains, exploring how sustained engagement with place generates insights about continuity between human creativity and natural creativity.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://www.ritaleduc.com/anecdotes" target="_blank">Anecdotes of Continuity – Rita Leduc</a></li>
+                            <li><a href="https://podcasts.apple.com/gb/podcast/dr-rich-blundell-rita-leduc-collaborating-with-nature/id1632823460?i=1000661880647" target="_blank">Arts + Ecology Podcast</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Climate Changing Minds Workshop (2022)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Museum of the White Mountains presentation with Rita Leduc exploring how art-science collaboration can shift understanding of climate change through embodied ecological relationship rather than abstract data alone.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://youtu.be/xFP-ZxBEJ-0" target="_blank">Climate Changing Minds</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- 2019-2021 -->
+    <section id="era-2019" class="era-section">
+        <header class="era-header">
+            <h2 class="era-title">Oika Formation & Cape Cod</h2>
+            <span class="era-years">2019–2021</span>
+        </header>
+        <p class="era-description">The development of Oika curriculum, interpretation methodology, and community of practice through workshops and creative collaborations.</p>
+        
+        <div class="projects-grid">
+            
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Into the Artmosphere Pilot (2019–2020)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">New Bedford, MA pilot program developing Oika curriculum and community of practice through Co-Creative Center, testing frameworks for ecological intelligence education through art, workshops, and VR demonstrations. Program established initial cohort model for exploring how cosmic evolution and ecological principles inform creative practice.</p>
+                        <p class="project-links-title">Resources</p>
+                        <ul class="project-links">
+                            <li><span class="note">Co-Creative Center New Bedford documentation</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Oika for Artists Courses (2021)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Intensive courses at Truro Center for the Arts on Cape Cod teaching artists how to integrate ecological intelligence into creative practice, resulting in Oika Interpretations of participant artworks that revealed how cosmic evolution and natural patterns inform aesthetic and creative choices.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://www.castlehill.org/2021-summerfall/2021/8/16/rich-blundell" target="_blank">Oika for Artists Course – Castle Hill Truro</a></li>
+                            <li><a href="https://youtu.be/MKto88zBD0w" target="_blank">Oika for Artists Course Introduction</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Oika Interpretation Series (2020–2022)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Collaborative video projects reinterpreting artworks through the Oika lens, demonstrating how ecological intelligence reveals new meanings in creative expression.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://vimeo.com/richblundell/starrynight" target="_blank">The Starry Night – van Gogh</a></li>
+                            <li><a href="https://vimeo.com/richblundell/playa" target="_blank">PLAYA – Rita Leduc</a></li>
+                            <li><a href="https://vimeo.com/richblundell/lake" target="_blank">Lake Tofte – Rita Leduc</a></li>
+                            <li><a href="https://vimeo.com/richblundell/mushroom" target="_blank">Life Cycle of a Mushroom – Rita Leduc</a></li>
+                            <li><a href="https://vimeo.com/richblundell/visitingbird" target="_blank">Visiting Bird – Annie Rapstoff</a></li>
+                            <li><a href="https://vimeo.com/richblundell/dance" target="_blank">Dance – Marianne A Kinzer</a></li>
+                            <li><a href="https://vimeo.com/richblundell/limulust" target="_blank">Limulus(t) – Jamie Levine</a></li>
+                            <li><a href="https://vimeo.com/544282032" target="_blank">The Lightherder – Dave Blair</a></li>
+                            <li><a href="https://vimeo.com/richblundell/earthstorybylevine" target="_blank">Earth Story – Jamie Levine</a></li>
+                            <li><a href="https://vimeo.com/546033988" target="_blank">Cloud I – David Whelan</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">History of the Cosmos Video Series (2020)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Seven-part immersive video series exploring cosmic evolution as ecology—from the ecology of light (Primordia), to celestial systems (Celestia), planetary awakening (Earthea), membrane coalescing (Animalia), and consciousness emergence. Traces 13.8 billion years of continuous creative process.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://vimeo.com/richblundell/primordia" target="_blank">Primordia – An ecology of light</a></li>
+                            <li><a href="https://vimeo.com/richblundell/celestia" target="_blank">Celestia – The night sky is an ecology of stars</a></li>
+                            <li><a href="https://vimeo.com/richblundell/earthea1" target="_blank">Earthea – A planet wakes up</a></li>
+                            <li><a href="https://vimeo.com/richblundell/animalia" target="_blank">Animalia – When membranes coalesce</a></li>
+                            <li><a href="https://podcasts.apple.com/us/podcast/history-of-the-cosmos-with-dr-rich-blundell/id1540145428?i=1000619250287" target="_blank">Part 1: PRIMORDIA (Better Place Podcast)</a></li>
+                            <li><a href="https://podcasts.apple.com/us/podcast/history-of-the-cosmos-with-dr-rich-blundell/id1540145428?i=1000620755567" target="_blank">Part 2: CELESTIA (Better Place Podcast)</a></li>
+                            <li><a href="https://podcasts.apple.com/us/podcast/history-of-the-cosmos-with-dr-rich-blundell/id1540145428?i=1000621498726" target="_blank">Part 3: EARTHEA (Better Place Podcast)</a></li>
+                            <li><a href="https://podcasts.apple.com/us/podcast/history-of-the-cosmos-with-dr-rich-blundell/id1540145428?i=1000622254647" target="_blank">Part 4: ANIMALIA (Better Place Podcast)</a></li>
+                            <li><a href="https://podcasts.apple.com/us/podcast/history-of-the-cosmos-with-dr-rich-blundell/id1540145428?i=1000623038410" target="_blank">Part 5: CULTURIA (Better Place Podcast)</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Oika Concept Videos (2020)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Short educational videos exploring fundamental Oika principles including narrative power, emergence as nature's creativity, and fractals as bridges connecting scales of organization from cosmic to cellular.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://vimeo.com/richblundell/narrative" target="_blank">NARRATIVE – The power of story in the human dimension</a></li>
+                            <li><a href="https://vimeo.com/richblundell/emergence" target="_blank">EMERGENCE – Nature's creativity as lived-experience</a></li>
+                            <li><a href="https://vimeo.com/richblundell/fractals" target="_blank">FRACTALS – The bridges that connect</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">A New Kind of Beauty (2021)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Public presentation at Noosphere Arts NYC exploring how ecological intelligence generates beauty and how aesthetic experience connects human consciousness with cosmic creativity, proposing beauty as indicator of right-relationship between human awareness and natural systems.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="http://www.noosphere-arts.nyc/we-are-nature" target="_blank">A New Kind of Beauty – Noosphere Arts NYC</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Not Cool Orange Rock (2021)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Signal House publication with Rita Leduc exploring field-based collaborative process and how sustained attention to particular places generates insights about the intelligence embedded in natural systems.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://www.signalhouseedition.org/issue-13-nonfiction" target="_blank">Not Cool Orange Rock – Signal House Publication</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- 2018-2019 -->
+    <section id="era-2018" class="era-section">
+        <header class="era-header">
+            <h2 class="era-title">CosmosisVR & Field Station Network</h2>
+            <span class="era-years">2018–2019</span>
+        </header>
+        <p class="era-description">Oculus-funded virtual reality experiences and multi-site workshop tours across American ecological research stations.</p>
+        
+        <div class="projects-grid">
+            
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">CosmosisVR Projects (2017–2019)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Oculus-funded virtual reality experiences including "In the Light of the Forest VR" (Oculus Creators Award winner) and Cosmic Background Radiation Explorer, creating immersive educational experiences connecting users with cosmic evolution and forest ecosystems. Projects demonstrated across multiple field station locations including LEAF Festival, Oculus conferences, and university workshops.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://vimeo.com/richblundell/inthelightoftheforest" target="_blank">In the Light of the Forest VR – Trailer</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Field Station Workshop Series (2018)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Multi-site workshop tour across American ecological research stations demonstrating Oika principles through field ecology and VR experiences. Locations included Blue Oak Ranch Field Station (CA), SUNY ESF Syracuse Field Station (NY), WildCenter Tupper Lake (NY), Beaver Island Field Station, and various California sites (Yosemite, Bodega Bay, Angelo Reserve).</p>
+                        <p class="project-links-title">Resources</p>
+                        <ul class="project-links">
+                            <li><span class="note">Field station network documentation</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Oika Professional Development Workshops – International (2018–2019)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Workshop series in Spain bringing Oika framework to European audiences and developing international collaborations with artists and educators. Events included Villa Sonora Festival, Escuela de Buhos Alicante, Muchas mas Mayo Festival, and various presentations in Cartagena and other Spanish cities.</p>
+                        <p class="project-links-title">Resources</p>
+                        <ul class="project-links">
+                            <li><span class="note">International workshop documentation</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Oika at WIRED25 San Francisco (2018)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Presentation and VR demonstrations at WIRED Magazine's 25th anniversary conference, bringing Oika principles and immersive cosmic evolution experiences to technology and innovation audience.</p>
+                        <p class="project-links-title">Resources</p>
+                        <ul class="project-links">
+                            <li><span class="note">WIRED25 conference archives</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Turtle Bone Oracles (2015)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Experimental video exploring divination practices and indigenous knowledge systems through the lens of ecological intelligence, examining how traditional practices of reading natural signs connect to deeper patterns of relationship between human consciousness and natural world.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://vimeo.com/143800725" target="_blank">Turtle Bone Oracles</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Oika in the Blockchain (2022)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Exploration of how blockchain technology and cryptocurrency economics could be integrated with ecological values and Oika principles, examining possibilities for linking digital value systems to ecological restoration and conservation outcomes.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://vimeo.com/703503253" target="_blank">Oika in the Blockchain</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- 2014-2017 -->
+    <section id="era-2014" class="era-section">
+        <header class="era-header">
+            <h2 class="era-title">Doctoral Research & Big History</h2>
+            <span class="era-years">2014–2017</span>
+        </header>
+        <p class="era-description">PhD research at Macquarie University exploring ecological and cultural dynamics within scientific cosmological evolution narratives.</p>
+        
+        <div class="projects-grid">
+            
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Waking Up in the Anthropocene: PhD Dissertation (2015)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Macquarie University doctoral research exploring ecological and cultural dynamics within scientific cosmological evolution narratives, integrating creative practice projects with academic investigation of Big History and biosphere relationships. Research examined how cosmic evolution narratives can inform contemporary environmental and cultural challenges.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://www.academia.edu/27180379/Waking_Up_in_the_Anthropocene_Big_History_and_the_Biosphere_Table_of_Contents_" target="_blank">Waking Up in the Anthropocene: Big History and the Biosphere</a></li>
+                            <li><a href="https://mq.academia.edu/RichBlundell" target="_blank">Rich Blundell Academia Profile</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Shakespeare in the Cave: A Big History of Art (2016)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">International Big History Association presentation at Dominican University proposing that artistic expression represents Earth's intelligence becoming conscious of itself through human creativity across deep time, arguing for art as evolutionary achievement rather than mere cultural production.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://www.academia.edu/8019656/Shakespeare_in_the_Cave_A_Big_History_of_Art_video_" target="_blank">Shakespeare in the Cave: A Big History of Art</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">A Surfer's Guide to the Universe (2014–2015)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Martha's Vineyard presentation and wooden surfboard project demonstrating how surfing practice embodies cosmic principles of wave dynamics, planetary rotation, and gravitational choreography. Project connected personal embodied experience with astrophysical processes.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://www.mvtimes.com/2015/07/15/a-surfers-guide-to-the-universe-how-a-wooden-surfboard-can-improve-our-cosmic-relationships/" target="_blank">A Surfer's Guide to the Universe – Martha's Vineyard Times</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Where to Earthlings (2017)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Hay-on-Wye open mic performance piece exploring identity and belonging from cosmic evolutionary perspective, questioning what it means to be "Earthlings" in context of 13.8 billion year creative process.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://www.youtube.com/watch?v=lHt5ndzNOsU" target="_blank">Where to Earthlings – Performance video</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">What's Next with Peter Buffett (2016)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Radio interview discussing the role of narrative and cosmic perspective in addressing contemporary challenges, exploring how understanding our place in cosmic evolution can inform wise decision-making.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://www.youtube.com/watch?v=LxcHaFGB6wQ" target="_blank">What's Next with Peter Buffett</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Communicating Science: A Novel Frame of Reverence (2009)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Master's thesis from State University of New York Buffalo exploring philosophy of science and intersections of science and humanities toward novel interpretations of scientific knowledge for cultural impact. Thesis proposed reverence as appropriate frame for science communication.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://www.academia.edu/947467/Communicating_Science_A_Novel_Frame_of_Reverence" target="_blank">Communicating Science: A Novel Frame of Reverence</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- 2005-2014 -->
+    <section id="era-2005" class="era-section">
+        <header class="era-header">
+            <h2 class="era-title">Science Communication & Surfboard Era</h2>
+            <span class="era-years">2005–2014</span>
+        </header>
+        <p class="era-description">Co-founding the wooden surfboard revival, cosmic background radiation apps, and documentary filmmaking.</p>
+        
+        <div class="projects-grid">
+            
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Grain Surfboards & TreeToSea.org (2005–2007)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Co-founded wooden surfboard revival movement demonstrating sustainable craft practices and embodied relationship with ocean ecosystems. Project combined traditional boatbuilding techniques with contemporary surfboard design, creating functional art pieces that required sustained relationship with wood, ocean, and craft process.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="http://www.grainsurf.com/press/Woodenboat.pdf" target="_blank">With the Grain – Woodenboat Magazine Summer 2006</a></li>
+                            <li><a href="https://youtu.be/d8vk8yhPm0s" target="_blank">Wooden Surfboard Revival – NPR Only a Game</a></li>
+                            <li><a href="https://vimeo.com/richblundell/pelagic-pulses" target="_blank">Pelagic Pulses – Surfboard Story Film</a></li>
+                            <li><a href="http://www.grainsurf.com/press/StarBulletin.pdf" target="_blank">Wooden Surfboard Artist Sparks Revival – Honolulu Star Bulletin</a></li>
+                            <li><a href="http://www.grainsurf.com/press/Neastmag.pdf" target="_blank">When Wood Hits the Water – N'East Magazine Winter 2005</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Cosmosis1: Cosmic Background Radiation Explorer (2012–2015)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">iPhone app and immersive education project making cosmic microwave background radiation accessible through augmented reality, allowing users to "see" the oldest light in universe through their device cameras. Project published in International Journal of Immersive Education demonstrating novel approaches to making abstract cosmological concepts tangible.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="http://cosmosis.omniscopic.com/cbr/index.html" target="_blank">Cosmosis1: The Cosmic Background Radiation Explorer</a></li>
+                            <li><a href="https://www.academia.edu/5579053/Making_it_Real_Developing_Cosmosis1_The_Cosmic_Backround_Radiation_Explorer_App" target="_blank">Making it Real – International Journal of Immersive Education</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">An Earth Story (2020)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Documentary collaboration with the Planetary Collective exploring how personal biography intersects with cosmic biography. The film traces Rich's life journey from commercial fishing to ecological science, demonstrating how individual human stories connect to the 13.8 billion year evolutionary narrative. Received the Deep Time Values award for best deep time video.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://www.youtube.com/watch?v=0vWpVSyRLoQ" target="_blank">An Earth Story – Full Documentary</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Center for Inquiry Promotional Video (2008)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Promotional video for the Center for Inquiry exploring the relationship between science and society, examining how scientific thinking and inquiry can inform public understanding and cultural progress while maintaining reverence for the natural world and human experience.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://vimeo.com/222968020/5e29a1b78b" target="_blank">CFI: Science and Society Promotional Video</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- 1999-2008 -->
+    <section id="era-1999" class="era-section">
+        <header class="era-header">
+            <h2 class="era-title">Field Research & Documentary</h2>
+            <span class="era-years">1999–2008</span>
+        </header>
+        <p class="era-description">NSF-funded documentaries, coral reef ecology in the Virgin Islands, and wildlife conservation in Kenya.</p>
+        
+        <div class="projects-grid">
+            
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Virgin Islands Environmental Research Station (VIERS) Projects</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Coral reef ecology and climate communication projects documenting scientists studying climate change impacts on Caribbean coral ecosystems. Created educational videos highlighting ecological features, research projects, and educational programs including National Geographic segment on Dr. Paul Sikkel's and Dr. Donna Nemeth's Earthwatch research.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://youtu.be/tWxes0-SDSM" target="_blank">Secrets of the Coral Reef – National Geographic Wild Chronicles February 2008</a></li>
+                            <li><a href="https://vimeo.com/211504051" target="_blank">VIERS Field Station Overview</a></li>
+                            <li><a href="https://vimeo.com/211507044" target="_blank">VIERS School Groups Program</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Grevy's Zebra Research Documentation (2006–2007)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Participated in and documented long-term ecological research of Grevy's Zebra conservation project in Kenya, including collaboration and outreach with local Samburu tribe. Project explored conservation biology while honoring indigenous relationships with wildlife.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://vimeo.com/947085140" target="_blank">Grevy's Zebra Research – Full Documentation</a></li>
+                            <li><a href="https://www.youtube.com/watch?v=X7VwA7i88qY" target="_blank">Extinction in Black & White – Wild Classroom Podcast January 2007</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Science Out There Series (NSF Grant, 2005)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">National Science Foundation-funded PBS Scientific American Frontiers documentary trilogy exploring field science through immersive experiences:</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.25rem; color: var(--text-secondary); font-size: 0.95rem;">
+                            <li style="margin-bottom: 0.5rem;"><strong>Science Out There I: The Secret Lives of Gulls</strong> – Isle of Shoals Herring Gull Research with Dr. Julie Ellis at Shoals Marine Lab</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Science Out There II: Mining for Bats</strong> – Beaver Island black bear research and cave ecology</li>
+                            <li><strong>Science Out There III: Secrets of the Anasazi Cliff-Dwellers</strong> – Chaco Canyon archaeology and traditional Anasazi rope-making techniques</li>
+                        </ul>
+                        <p class="project-links-title">Resources</p>
+                        <ul class="project-links">
+                            <li><span class="note">PBS Scientific American Frontiers – "Living in the Sky" aired March 2005</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Lake Champlain Museum: Shipwrecks! (2005)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Documentary exploring underwater archaeology and maritime history of Lake Champlain, connecting natural history with human navigation and relationship with inland waterways.</p>
+                        <p class="project-links-title">Resources</p>
+                        <ul class="project-links">
+                            <li><span class="note">Lake Champlain Museum archives</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- Media Appearances -->
+    <section id="media" class="era-section">
+        <header class="era-header">
+            <h2 class="era-title">Podcast & Media Appearances</h2>
+            <span class="era-years">Selected</span>
+        </header>
+        
+        <div class="projects-grid">
+            
+            <article class="project-card expanded">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Voices with Vervaeke Series (2022–2023)</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <p class="project-description">Multi-part conversation with Dr. John Vervaeke exploring Oika principles, ecological intelligence, creativity, and transcendent naturalism.</p>
+                        <p class="project-links-title">Links</p>
+                        <ul class="project-links">
+                            <li><a href="https://www.youtube.com/watch?v=Cfbqaj5Gxyo" target="_blank">Voices with Vervaeke Part 1</a></li>
+                            <li><a href="https://youtu.be/P7MscQ3T_Rc" target="_blank">Part 2: Deeper into Ecological Intelligence</a></li>
+                            <li><a href="https://youtu.be/_I3G7ui6duI" target="_blank">Part 3: Nature at the Table</a></li>
+                            <li><a href="https://youtu.be/e2G9nuMc0RE" target="_blank">The Interconnected Universe – Transcendent Naturalism</a></li>
+                            <li><a href="https://www.youtube.com/watch?v=cLbrtv5WA7A" target="_blank">Unlocking Creativity – Transcendent Naturalism</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Featured Interviews & Podcasts</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <div class="media-grid">
+                            <div class="media-item"><a href="https://youtu.be/Q-wMUaQNtFE" target="_blank">Oika on UTOKING I – Gregg Henriques</a></div>
+                            <div class="media-item"><a href="https://youtu.be/F8u6yvUK_Es" target="_blank">Oika on UTOKING II – Gregg Henriques</a></div>
+                            <div class="media-item"><a href="https://podcasts.apple.com/us/podcast/future-is-beautiful-or-there-isnt-one-dr-rich-blundell/id1540145428?i=1000527990270" target="_blank">Better Place Project: Future is Beautiful</a></div>
+                            <div class="media-item"><a href="https://podcasts.apple.com/us/podcast/better-place-project-with-steve-norris/id1540145428?i=1000548222236" target="_blank">Better Place Project: Ecological Intelligence</a></div>
+                            <div class="media-item"><a href="https://podcasts.apple.com/us/podcast/rich-blundell-entangled-in-the-cosmos/id1684981258?i=1000660899617" target="_blank">Infinite Search: Entangled in the Cosmos</a></div>
+                            <div class="media-item"><a href="https://podcasts.apple.com/us/podcast/dr-rich-blundell-scientist-big-history-the-cosmic-story/id1562919778?i=1000551499465" target="_blank">Growth Guide Podcast</a></div>
+                            <div class="media-item"><a href="https://podcasts.apple.com/us/podcast/46-the-future-of-entrepreneurialism-the-importance/id1545288914?i=1000547048050" target="_blank">TOARC Part 1: Future of Entrepreneurialism</a></div>
+                            <div class="media-item"><a href="https://podcasts.apple.com/us/podcast/thoughts-of-a-random-citizen/id1545288914?i=1000547725821" target="_blank">TOARC Part 2: Ecological Intelligence & Oika Art</a></div>
+                            <div class="media-item"><a href="https://podcasts.apple.com/us/podcast/dr-rich-blundell-uncommon-convos-episode-019/id1558193232?i=1000534732412" target="_blank">Uncommon Convos – Dennis VanDerGinst</a></div>
+                            <div class="media-item"><a href="https://podcasts.apple.com/us/podcast/deeper-energy-podcast/id1490587909?i=1000531587727" target="_blank">Deeper Energy Podcast – Real Remmington</a></div>
+                            <div class="media-item"><a href="https://podcasts.google.com/feed/aHR0cHM6Ly9wYW5zb2NpZXR5LnBvZGJlYW4uY29tL2ZlZWQueG1s/episode/cGFuc29jaWV0eS5wb2RiZWFuLmNvbS80YzlhY2ViNi0yZDk0LTNmZjEtODk1ZC0wMWY2MDg1Y2M0MGU" target="_blank">Modern Animism Podcast</a></div>
+                            <div class="media-item"><a href="https://open.spotify.com/episode/14SDwUnhzUy8mRufIVGatI" target="_blank">Co-Creative Podcast</a></div>
+                            <div class="media-item"><a href="https://podcasts.apple.com/us/podcast/in-good-faith/id1279492636?i=1000587592835" target="_blank">In Good Faith: Nature and Spiritual Connection</a></div>
+                            <div class="media-item"><a href="https://youtu.be/cn9Q7nd1l6M" target="_blank">In Good Faith Radio (BYU SiriusXM)</a></div>
+                            <div class="media-item"><a href="https://podcasts.apple.com/us/podcast/the-science-of-wonder-with-dr-rich-blundell/id1507507611?i=1000623754062" target="_blank">The Science of Wonder – Tracking Yes</a></div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header" onclick="toggleProject(this.parentElement)">
+                    <h3 class="project-title">Major Presentations & Talks</h3>
+                    <button class="project-toggle" aria-label="Toggle details">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="project-content">
+                    <div class="project-content-inner">
+                        <div class="media-grid">
+                            <div class="media-item"><a href="https://youtu.be/Rv7EIHTEjg0?t=2923" target="_blank">Introducing Oika – Consilience Conference</a></div>
+                            <div class="media-item"><a href="https://www.youtube.com/watch?v=vr7cFZktKM4" target="_blank">Oika Part I: Personal and Planetary Prosperity</a></div>
+                            <div class="media-item"><a href="https://www.youtube.com/watch?v=baQOKC5NYoM" target="_blank">Oika Part II: Extending Ecology – Berlin</a></div>
+                            <div class="media-item"><a href="https://www.youtube.com/watch?v=ggKsbyo0u8I" target="_blank">The Natural History of Us – GSN Summit</a></div>
+                            <div class="media-item"><a href="https://vimeo.com/richblundell/earthling" target="_blank">Earthling Theory – Maria Mitchell Association</a></div>
+                            <div class="media-item"><a href="https://nantucketfilmfestival.org/nff2022-guide/2022/green-carpet-cinematalk" target="_blank">A Natural History of Story – NFF Keynote 2022</a></div>
+                            <div class="media-item"><a href="https://youtu.be/xGxBx0g-tvY?t=1080" target="_blank">Lessons from the First Light – UU Nantucket</a></div>
+                            <div class="media-item"><a href="https://youtu.be/Iag8TIbzaFM" target="_blank">Deeptime Meditation on Water – Lake Prespa, Greece</a></div>
+                            <div class="media-item"><a href="https://supercluster.eu/oika/" target="_blank">Oikanomics 101 – 9-hour Workshop</a></div>
+                            <div class="media-item"><a href="https://youtu.be/4fKlb7eFxWg" target="_blank">Denatured Renatured – Art-Sci Conversation</a></div>
+                            <div class="media-item"><a href="https://www.youtube.com/watch?v=8e_TBoiqmDA" target="_blank">Arts, Humanities, and Sciences: Emergent Necessary Unities</a></div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+</main>
+
+<footer class="archive-footer">
+    <p>Archive compiled December 2024 · <a href="mailto:rich@earthos.org">rich@earthos.org</a></p>
+</footer>
+
+<script>
+function toggleProject(card) {
+    card.classList.toggle('expanded');
+}
+
+// Sticky nav active state
+const sections = document.querySelectorAll('.era-section');
+const navLinks = document.querySelectorAll('.era-link');
+
+function updateActiveNav() {
+    let current = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (scrollY >= sectionTop) {
+            current = section.getAttribute('id');
+        }
+    });
+    
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+            link.classList.add('active');
+        }
+    });
+}
+
+window.addEventListener('scroll', updateActiveNav);
+updateActiveNav();
+</script>
+
+</body>
+</html>
